@@ -62,10 +62,10 @@ void lidarComOpcaoDoMenu(int opcao)
     switch (opcao)
     {
     case 1:
-        printf("\nOpção 1 selecionada. Texto Cifrado (Início): %.100s...\n", estadoAtual.textoCifrado);
+        exibirEstadoCripto();
         break;
     case 2:
-        printf("Opção 2 selecionada. (Análise de Frequência - Não implementada)\n");
+        // analisarEChutarFrequencia();
         break;
     case 3:
         printf("Opção 3 selecionada. (Casamento Exato)\n");

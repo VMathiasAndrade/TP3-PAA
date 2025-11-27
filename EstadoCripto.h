@@ -10,6 +10,7 @@ typedef struct {
     char chaveDecifracao[TAMANHO_ALFABETO + 1]; 
     char textoCifrado[TAMANHO_MAX_TEXTO];
     char textoParcial[TAMANHO_MAX_TEXTO];
+    int shiftCriptografia;
 } EstadoCripto;
 
 extern EstadoCripto estadoAtual;
@@ -20,4 +21,6 @@ int carregarEEncriptarTexto(const char *nomeArquivoClaro, const char *nomeArquiv
 void casamentoExato(char* padrao);
 void exportarChave(const char *nomeArquivoChave);
 
+void exibirEstadoCripto(void); // Opção 1
+// void analisarEChutarFrequencia(void); // Opção 2
 #endif
