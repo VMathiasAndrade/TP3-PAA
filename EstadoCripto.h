@@ -7,13 +7,14 @@
 
 typedef struct {
     char alfabetoOriginal[TAMANHO_ALFABETO + 1]; // "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    char textoCifrado[TAMANHO_MAX_TEXTO];
     char chaveDecifracao[TAMANHO_ALFABETO + 1]; 
+    char textoCifrado[TAMANHO_MAX_TEXTO];
 } EstadoCripto;
 
 extern EstadoCripto estadoAtual;
 
 void inicializarEstadoCripto(void);
+int nomarlizarAcentuacao(FILE* f);
 int carregarEEncriptarTexto(const char *nomeArquivoClaro, const char *nomeArquivoCifrado);
 void exportarChave(const char *nomeArquivoChave);
 

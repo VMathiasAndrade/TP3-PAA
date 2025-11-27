@@ -16,10 +16,13 @@ int main(int argc, char *argv[])
     printf("--- Trabalho Prático 3 - Criptoanálise ---\n");
 
     char nomeArquivoClaro[64];
-    char nomeArquivoCifrado[] = "texto_cifrado.txt";
+    char nomeArquivoCifrado[66];
 
     printf("Informe o nome do arquivo de texto claro a ser lido (ex: Teste.txt): ");
     scanf("%63s", nomeArquivoClaro);
+
+    printf("Informe o nome do arquivo para escrever o texto criptografado: ");
+    scanf("%65s", nomeArquivoCifrado);
 
     if (!carregarEEncriptarTexto(nomeArquivoClaro, nomeArquivoCifrado))
     {
@@ -32,8 +35,7 @@ int main(int argc, char *argv[])
         exibirMenu();
         if (scanf("%d", &escolha) != 1)
         {
-            while (getchar() != '\n')
-                ;
+            while (getchar() != '\n');
             escolha = 0;
         }
         lidarComOpcaoDoMenu(escolha);

@@ -17,6 +17,48 @@ void inicializarEstadoCripto(void) {
    srand(time(NULL));
 }
 
+int nomarlizarAcentuacao(FILE* f){
+    int c = fgetc(f);
+    if (c == EOF) return EOF;
+
+    if (c == 0xC3) {
+        int prox = fgetc(f);
+
+        switch (prox) {
+        case 0x80: case 0x81: case 0x82: case 0x83: // À, Á, Â, Ã
+        case 0xA0: case 0xA1: case 0xA2: case 0xA3: // à, á, â, ã
+            return 'A';
+            
+        case 0x89: case 0x8A: // É, Ê
+        case 0xA9: case 0xAA: // é, ê
+            return 'E';
+            
+        case 0x8D: // Í
+        case 0xAD: // í
+            return 'I';
+        
+        case 0x93: case 0x94: case 0x95: // Ó, Ô, Õ
+        case 0xB3: case 0xB4: case 0xB5: // ó, ô, õ
+            return 'O';
+        
+        case 0x9A: // Ú
+        case 0xBA: // ú
+            return 'U';
+        
+        case 0x87: // Ç
+        case 0xA7: // ç
+            return 'C';
+        
+        default:
+            break;
+        }
+    }
+    
+    if (isalpha(c)) return toupper(c);
+
+    return c;
+}
+
 char aplicarDeslocamento(char caractereClaro, int deslocamento) {
     if (isalpha(caractereClaro)) {
         char caractereCifrado = ((caractereClaro - 'A') + deslocamento) % TAMANHO_ALFABETO;
@@ -45,7 +87,7 @@ int carregarEEncriptarTexto(const char *nomeArquivoClaro, const char *nomeArquiv
     int c;
     int indice = 0;
     
-    while ((c = fgetc(fClaro)) != EOF && indice < TAMANHO_MAX_TEXTO - 1) {
+    while ((c = nomarlizarAcentuacao(fClaro)) != EOF && indice < TAMANHO_MAX_TEXTO - 1) {
         char caractereCifrado = c;
         if (isalpha(c)) {
             caractereCifrado = aplicarDeslocamento(toupper(c), deslocamento);
