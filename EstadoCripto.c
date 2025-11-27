@@ -13,6 +13,7 @@ void inicializarEstadoCripto(void) {
     }
     estadoAtual.chaveDecifracao[TAMANHO_ALFABETO] = '\0';
     estadoAtual.textoCifrado[0] = '\0';
+    estadoAtual.textoParcial[0] = '\0';
     
    srand(time(NULL));
 }
@@ -98,6 +99,7 @@ int carregarEEncriptarTexto(const char *nomeArquivoClaro, const char *nomeArquiv
     }
     
     estadoAtual.textoCifrado[indice] = '\0';
+    strcpy(estadoAtual.textoParcial, estadoAtual.textoCifrado);
     
     printf("Texto cifrado salvo em '%s'.\n", nomeArquivoCifrado);
     
@@ -106,9 +108,21 @@ int carregarEEncriptarTexto(const char *nomeArquivoClaro, const char *nomeArquiv
     return 1;
 }
 
+void frenquenciaCaracter() {
+    int m = strlen(estadoAtual.textoCifrado);
+    int totalLetras = 0;
+    long long vetorFrequencia[m][2];
+
+    for (int i = 0; estadoAtual.textoCifrado[i] != '\0'; i++) {
+        unsigned char c = (unsigned char)estadoAtual.textoCifrado[i];
+
+    }
+    
+}
+
 void casamentoExato(char* padrao) {
     int m = strlen(padrao);
-    int n = strlen(estadoAtual.textoCifrado);
+    int n = strlen(estadoAtual.textoParcial);
 
     if (m > 64) {
         printf("Erro: O padrão é muito longo para o algoritmo Shift-And (max 64 caracteres).\n");
@@ -129,7 +143,7 @@ void casamentoExato(char* padrao) {
     int ocorrencias = 0;
 
     for (int i = 0; i < n; i++) {
-        unsigned char c = (unsigned char)estadoAtual.textoCifrado[i];
+        unsigned char c = (unsigned char)estadoAtual.textoParcial[i];
 
         R = ((R << 1) | 1UL) & M[c];
         
@@ -137,6 +151,10 @@ void casamentoExato(char* padrao) {
     }
 
     printf("\nOcorrencias: %d\n", ocorrencias);
+}
+
+void casamentoAproximado(char* padrao) {
+
 }
 
 void exportarChave(const char *nomeArquivoChave) {

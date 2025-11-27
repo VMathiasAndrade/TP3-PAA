@@ -9,6 +9,7 @@ typedef struct {
     char alfabetoOriginal[TAMANHO_ALFABETO + 1]; // "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     char chaveDecifracao[TAMANHO_ALFABETO + 1]; 
     char textoCifrado[TAMANHO_MAX_TEXTO];
+    char textoParcial[TAMANHO_MAX_TEXTO];
 } EstadoCripto;
 
 extern EstadoCripto estadoAtual;
