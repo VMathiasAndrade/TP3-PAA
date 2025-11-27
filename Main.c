@@ -8,8 +8,7 @@ EstadoCripto estadoAtual;
 void exibirMenu(void);
 void lidarComOpcaoDoMenu(int opcao);
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 
     inicializarEstadoCripto();
 
@@ -17,7 +16,7 @@ int main(int argc, char *argv[])
 
     char nomeArquivoClaro[64];
     char nomeArquivoCifrado[66];
-
+        
     printf("Informe o nome do arquivo de texto claro a ser lido (ex: Teste.txt): ");
     scanf("%63s", nomeArquivoClaro);
 
@@ -69,10 +68,17 @@ void lidarComOpcaoDoMenu(int opcao)
         printf("Opção 2 selecionada. (Análise de Frequência - Não implementada)\n");
         break;
     case 3:
-        printf("Opção 3 selecionada. (Casamento Exato - Não implementada)\n");
+        printf("Opção 3 selecionada. (Casamento Exato)\n");
+        
+        char padrao[64];
+
+        printf("Qual o padrao utilizado: ");
+        scanf("%63s", padrao);
+        
+        casamentoExato(padrao);
         break;
     case 4:
-        printf("Opção 4 selecionada. (Casamento Aproximado - Não implementada)\n");
+        printf("Opção 4 selecionada. (Casamento Aproximado - Não implementado)\n\n");
         break;
     case 5:
         printf("Opção 5 selecionada. (Alterar Chave - Não implementada)\n");

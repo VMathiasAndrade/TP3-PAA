@@ -106,6 +106,39 @@ int carregarEEncriptarTexto(const char *nomeArquivoClaro, const char *nomeArquiv
     return 1;
 }
 
+void casamentoExato(char* padrao) {
+    int m = strlen(padrao);
+    int n = strlen(estadoAtual.textoCifrado);
+
+    if (m > 64) {
+        printf("Erro: O padrão é muito longo para o algoritmo Shift-And (max 64 caracteres).\n");
+        return;
+    }
+    
+    unsigned long M[256]; //Tabela M
+
+    for (int i = 0; i < 256; i++) {
+        M[i] = 0;
+    }
+    for (int j = 0; j < m; j++) {
+        unsigned char c = (unsigned char)padrao[j];
+        M[c] |= (1UL << j);
+    }
+    
+    unsigned long R = 0;
+    int ocorrencias = 0;
+
+    for (int i = 0; i < n; i++) {
+        unsigned char c = (unsigned char)estadoAtual.textoCifrado[i];
+
+        R = ((R << 1) | 1UL) & M[c];
+        
+        if (R & (1UL << (m - 1))) ocorrencias++;
+    }
+
+    printf("\nOcorrencias: %d\n", ocorrencias);
+}
+
 void exportarChave(const char *nomeArquivoChave) {
     FILE *fChave = fopen(nomeArquivoChave, "w");
     if (!fChave) {
