@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "EstadoCripto.h"
+#include "src/Operacoes.h"
 
 EstadoCripto estadoAtual;
 
@@ -14,14 +14,14 @@ int main(int argc, char *argv[]) {
 
     printf("--- Trabalho Prático 3 - Criptoanálise ---\n");
 
-    char nomeArquivoClaro[64];
-    char nomeArquivoCifrado[66];
+    char nomeArquivoClaro[64] = "texto_claro/Anaxa.txt";
+    char nomeArquivoCifrado[66] = "texto_cripto/AnaxaC.txt";
         
-    printf("Informe o nome do arquivo de texto claro a ser lido (ex: Teste.txt): ");
+    /*printf("Informe o nome do arquivo de texto claro a ser lido (ex: Teste.txt): ");
     scanf("%63s", nomeArquivoClaro);
 
     printf("Informe o nome do arquivo para escrever o texto criptografado: ");
-    scanf("%65s", nomeArquivoCifrado);
+    scanf("%65s", nomeArquivoCifrado);*/
 
     if (!carregarEEncriptarTexto(nomeArquivoClaro, nomeArquivoCifrado))
     {
@@ -65,11 +65,9 @@ void lidarComOpcaoDoMenu(int opcao)
         exibirEstadoCripto();
         break;
     case 2:
-        // analisarEChutarFrequencia();
+        frequenciaCaracter();
         break;
     case 3:
-        printf("Opção 3 selecionada. (Casamento Exato)\n");
-        
         char padrao[64];
 
         printf("Qual o padrao utilizado: ");
