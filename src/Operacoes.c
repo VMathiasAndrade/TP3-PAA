@@ -412,7 +412,7 @@ void gerarTextoDecifradoCompleto(char *saida)
     saida[len] = '\0';
 }
 
-// Em src/Operacoes.c
+
 
 void exportarChaveETexto(const char *nomeArquivo)
 {
@@ -422,8 +422,8 @@ void exportarChaveETexto(const char *nomeArquivo)
         printf("Erro: Não foi possível criar o arquivo '%s'.\n", nomeArquivo);
         return;
     }
-
-    // CORREÇÃO AQUI: Use fprintf em vez de printf
+ 
+   
     fprintf(f, "===== CHAVE DECRIPTOGRAFIA =====\n\n");
     fprintf(f, "Cifrado  ->  Original\n");
     fprintf(f, "--------------------------\n");
