@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "src/Operacoes.h"
 
 EstadoCripto estadoAtual;
@@ -76,11 +77,31 @@ void lidarComOpcaoDoMenu(int opcao)
         casamentoExato(padrao);
         break;
     case 4:
-        printf("Opção 4 selecionada. (Casamento Aproximado - Não implementado)\n\n");
+        char padrao1[64];
+        int tolerancia;
+        
+        printf("Digite um padrao: ");
+        scanf("%s", padrao1);
+        
+        printf("Digite a tolerancia de erros: ");
+        scanf("%d", &tolerancia);
+        for(int i=0; padrao1[i]; i++) 
+            padrao1[i] = toupper(padrao1[i]);
+
+        casamentoAproximado(padrao1, tolerancia);
         break;
     case 5:
-        printf("Opção 5 selecionada. (Alterar Chave - Não implementada)\n");
+        char letraCif, letraDecif;
+
+        printf("digite a letra a substituir: ");
+        scanf(" %c", &letraCif);
+        
+        printf("digite a letra decifrada: ");
+        scanf(" %c", &letraDecif);
+        
+        alterarChave(letraCif, letraDecif);
         break;
+
     case 6:
         printf("Informe o nome do arquivo para salvar a chave (ex: chave_final.txt): ");
         scanf("%63s", nomeArquivoSaida);

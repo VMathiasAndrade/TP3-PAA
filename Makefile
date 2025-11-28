@@ -4,39 +4,42 @@
 # Variáveis de Configuração
 # ====================================================================
 
-# Compilador C (use 'gcc' se estiver no ambiente MinGW ou Cygwin)
+# Compilador C
 CC = gcc
 
+# Diretório onde estão os códigos fonte (.c e .h)
+SRC_DIR = src
+
 # Flags de compilação:
-# -Wall -Wextra: Avisos de compilação (boas práticas)
-# -std=c99: Usar o padrão C99
-# -g: Incluir informações de debug (útil para depuração)
-CFLAGS = -Wall -Wextra -std=c99 -g
+# -I$(SRC_DIR): Diz ao compilador para procurar os .h dentro da pasta src
+CFLAGS = -Wall -Wextra -std=c99 -g -I$(SRC_DIR)
 
-# Arquivos fonte
-SRCS = Main.c EstadoCripto.c
+# Arquivos fonte (Agora apontando explicitamente para a pasta src)
+# Nota: Adicionei Operacoes.c que estava faltando
+SRCS = $(SRC_DIR)/Main.c $(SRC_DIR)/EstadoCripto.c $(SRC_DIR)/Operacoes.c
 
-# Arquivos objeto gerados
-OBJS = $(SRCS:.c=.o)
+# Arquivos objeto gerados (Mantemos eles na raiz para simplificar)
+# Esta linha converte "src/Arquivo.c" em "Arquivo.o"
+OBJS = Main.o EstadoCripto.o Operacoes.o
 
-# Nome do executável (para Windows)
+# Nome do executável
 TARGET = tp3_criptoanalise.exe
 
 # ====================================================================
 # Regras de Build
 # ====================================================================
 
-# Regra padrão: compilar tudo
+# Regra padrão
 all: $(TARGET)
 
-# Regra de linkagem: Cria o executável a partir dos arquivos objeto
+# Regra de linkagem
 $(TARGET): $(OBJS)
 	@echo "Ligando: $^ para $@..."
 	$(CC) $(OBJS) -o $(TARGET)
 
-# Regra de compilação: Cria os arquivos objeto (.o) a partir dos fontes (.c)
-# Esta regra usa $< (primeiro pré-requisito) e $@ (nome do alvo)
-.c.o:
+# Regra de compilação genérica
+# Diz: "Para criar um .o na raiz, pegue o .c correspondente na pasta src"
+%.o: $(SRC_DIR)/%.c
 	@echo "Compilando: $<..."
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -44,10 +47,8 @@ $(TARGET): $(OBJS)
 # Regras de Limpeza
 # ====================================================================
 
-# Regra de limpeza: Remove arquivos gerados (.o e .exe)
 clean:
-	@echo "Removendo arquivos temporários (.o e .exe)..."
-	-del /Q $(OBJS) $(TARGET)
+	@echo "Removendo arquivos temporarios..."
+	rm -f $(OBJS) $(TARGET)
 
-# Regra para evitar conflitos de nomes (não é um arquivo)
 .PHONY: all clean

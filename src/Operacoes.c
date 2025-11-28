@@ -182,8 +182,81 @@ void casamentoExato(char* padrao) {
     printf("\nOcorrencias: %d\n", ocorrencias);
 }
 
-void casamentoAproximado(char* padrao) {
+void casamentoAproximado(char* padrao, int k) {
+    int m = strlen(padrao);
+    int n = strlen(estadoAtual.textoCifrado);
 
+    if (m > 64) {
+        printf("Erro: O padrao e muito longo (max 64 caracteres).\n");
+        return;
+    }
+    char* textoDecifradoTemp = (char*) malloc((n + 1) * sizeof(char));
+    if (!textoDecifradoTemp) return;
+
+    for (int i = 0; i < n; i++) {
+        char c = estadoAtual.textoCifrado[i];
+        if (isalpha(c)) {
+            int idx = c - 'A';
+            if (estadoAtual.chaveDecifracao[idx] != '\0') {
+                textoDecifradoTemp[i] = estadoAtual.chaveDecifracao[idx];
+            } else {
+                textoDecifradoTemp[i] = c;
+            }
+        } else {
+            textoDecifradoTemp[i] = c;
+        }
+    }
+    textoDecifradoTemp[n] = '\0';
+
+    unsigned long M[256];
+    for (int i = 0; i < 256; i++) M[i] = 0;
+    
+    for (int j = 0; j < m; j++) {
+        unsigned char c = (unsigned char)padrao[j];
+        M[c] |= (1UL << j);
+    }
+    unsigned long R[k + 1]; 
+    unsigned long R_antigo[k + 1];
+
+    for(int j=0; j <= k; j++) R[j] = 0;
+
+    int ocorrencias = 0;
+
+    printf("\n--- Ocorrencias Aproximadas (Erro max: %d) ---\n", k);
+    for (int i = 0; i < n; i++) {
+        unsigned char c = (unsigned char)textoDecifradoTemp[i];
+        
+        for(int j=0; j <= k; j++) R_antigo[j] = R[j];
+
+        R[0] = ((R_antigo[0] << 1) | 1UL) & M[c];
+
+        for (int j = 1; j <= k; j++) {
+            unsigned long match = ((R_antigo[j] << 1) | 1UL) & M[c];
+            unsigned long substituicao = (R_antigo[j-1] << 1) | 1UL;
+            
+            R[j] = match | substituicao;
+        }
+
+        if (R[k] & (1UL << (m - 1))) {
+            ocorrencias++;
+
+            int inicio = i - m + 1;
+            if (inicio < 0) inicio = 0;
+            printf("Pos %d: ", inicio);
+            
+            for(int x = inicio; x <= i; x++) {
+                if (textoDecifradoTemp[x] == padrao[x - inicio]) {
+                    printf("\033[1;32m%c\033[0m", textoDecifradoTemp[x]);
+                } else {
+                    printf("%c", textoDecifradoTemp[x]);
+                }
+            }
+            printf("\n");
+        }
+    }
+
+    printf("Total de ocorrencias encontradas: %d\n", ocorrencias);
+    free(textoDecifradoTemp);
 }
 
 void exportarChave(const char *nomeArquivoChave) {
