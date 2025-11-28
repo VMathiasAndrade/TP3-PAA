@@ -9,7 +9,7 @@ EstadoCripto estadoAtual;
 void exibirMenu(void);
 void lidarComOpcaoDoMenu(int opcao);
 
-int main(int argc, char *argv[]) {
+int main(void) {
 
     inicializarEstadoCripto();
 
