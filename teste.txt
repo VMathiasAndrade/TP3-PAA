@@ -1,0 +1,39 @@
+===== CHAVE DECRIPTOGRAFIA =====
+
+Cifrado  ->  Original
+--------------------------
+A        ->  (desconhecida)
+B        ->  (desconhecida)
+C        ->  (desconhecida)
+D        ->  (desconhecida)
+E        ->  (desconhecida)
+F        ->  A
+G        ->  (desconhecida)
+H        ->  (desconhecida)
+I        ->  (desconhecida)
+J        ->  E
+K        ->  (desconhecida)
+L        ->  (desconhecida)
+M        ->  (desconhecida)
+N        ->  (desconhecida)
+O        ->  (desconhecida)
+P        ->  (desconhecida)
+Q        ->  (desconhecida)
+R        ->  (desconhecida)
+S        ->  (desconhecida)
+T        ->  O
+U        ->  (desconhecida)
+V        ->  (desconhecida)
+W        ->  (desconhecida)
+X        ->  (desconhecida)
+Y        ->  (desconhecida)
+Z        ->  (desconhecida)
+
+
+===== TEXTO DECIFRADO =====
+
+O GOXVZE IA EUNKASNA, OSIE O HOSMEHNRESYO KQOWEXHE E OX KNQOXOKOX SAXHER. SO ESYASYO, AVZN EXYA ASACALOWAX, O GQAXKERO, O MEWIENWO IE HMWDXOX VZE IEXAKNA A HMARA IA WAEAO: AOHE WEAQRESYE AGWAHAWNA A NSKARNA E IEXAKNAWNA A UWOKEHNA, HWAAASIO OX EXUNSMOX IA IZANIA SA AWAOWE XALWAIA IA XAGEIOWNA?
+
+"YZ YWASXHESIEWAX OX UNHOX IA UZWEEA E WEYOWSAWAX A HOWWZUHAO E A AIAEWXNIAIE."
+
+

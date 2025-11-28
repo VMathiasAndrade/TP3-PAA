@@ -83,6 +83,33 @@ char aplicarDeslocamento(char caractereClaro, int deslocamento) {
     return caractereClaro;
 }
 
+int carregarEEncriptarTodosTextos(int deslocamento, int freqGlobal[26], int *totalGlobal) {
+    *totalGlobal = 0;
+    for (int i = 0; i < 26; i++) freqGlobal[i] = 0;
+
+    for (int arq = 0; arq < 12; arq++) {
+        FILE *f = fopen(ARQUIVOS_PROFECIAS[arq], "r");
+        if (!f) {
+            printf("Erro ao abrir %s\n", ARQUIVOS_PROFECIAS[arq]);
+            continue;
+        }
+
+        int c;
+        while ((c = nomarlizarAcentuacao(f)) != EOF) {
+            if (isalpha(c)) {
+                char cifrado = aplicarDeslocamento(c, deslocamento);
+                int idx = cifrado - 'A';
+                freqGlobal[idx]++;
+                (*totalGlobal)++;
+            }
+        }
+
+        fclose(f);
+    }
+
+    return 1;
+}
+
 int carregarEEncriptarTexto(const char *nomeArquivoClaro, const char *nomeArquivoCifrado) {
     FILE *fClaro = fopen(nomeArquivoClaro, "r");
     if (!fClaro) {

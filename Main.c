@@ -13,16 +13,17 @@ int main(int argc, char *argv[]) {
 
     inicializarEstadoCripto();
 
-    printf("--- Trabalho Prático 3 - Criptoanálise ---\n");
+    printf("--- Trabalho Pratico 3 - Criptoanalise ---\n");
 
-    char nomeArquivoClaro[64] = "texto_claro/Anaxa.txt";
-    char nomeArquivoCifrado[66] = "texto_cripto/AnaxaC.txt";
+    char nomeArquivoClaro[64];
+    char nomeArquivoCifrado[66];
         
-    /*printf("Informe o nome do arquivo de texto claro a ser lido (ex: Teste.txt): ");
+    printf("Informe o nome do arquivo de texto claro a ser lido (ex: texto_claro/Anaxa.txt): ");
     scanf("%63s", nomeArquivoClaro);
+    
+    printf("Informe o nome do arquivo para escrever o texto criptografado (ex: texto_cripto/Anaxa.txt): ");
+    scanf("%65s", nomeArquivoCifrado);
 
-    printf("Informe o nome do arquivo para escrever o texto criptografado: ");
-    scanf("%65s", nomeArquivoCifrado);*/
 
     if (!carregarEEncriptarTexto(nomeArquivoClaro, nomeArquivoCifrado))
     {
@@ -46,7 +47,7 @@ int main(int argc, char *argv[]) {
 
 void exibirMenu(void)
 {
-    printf("\n--- Opções ---\n");
+    printf("\n--- Opcoes ---\n");
     printf("1. Apresentar o estado atual da criptoanálise\n");
     printf("2. Fazer um chute baseado análise de frequência\n");
     printf("3. Realizar casamento exato de caracteres\n");
@@ -69,14 +70,17 @@ void lidarComOpcaoDoMenu(int opcao)
         frequenciaCaracter();
         break;
     case 3:
+    {
         char padrao[64];
 
         printf("Qual o padrao utilizado: ");
         scanf("%63s", padrao);
         
         casamentoExato(padrao);
-        break;
+    }
+    break;
     case 4:
+    {
         char padrao1[64];
         int tolerancia;
         
@@ -89,8 +93,10 @@ void lidarComOpcaoDoMenu(int opcao)
             padrao1[i] = toupper(padrao1[i]);
 
         casamentoAproximado(padrao1, tolerancia);
-        break;
+    }
+    break;
     case 5:
+    {
         char letraCif, letraDecif;
 
         printf("digite a letra a substituir: ");
@@ -100,15 +106,16 @@ void lidarComOpcaoDoMenu(int opcao)
         scanf(" %c", &letraDecif);
         
         alterarChave(letraCif, letraDecif);
-        break;
+    }
+    break;
 
     case 6:
         printf("Informe o nome do arquivo para salvar a chave (ex: chave_final.txt): ");
         scanf("%63s", nomeArquivoSaida);
-        exportarChave(nomeArquivoSaida);
+        exportarChaveETexto(nomeArquivoSaida);
         printf("Encerrando o programa...\n");
         break;
     default:
-        printf("Opção inválida. Tente novamente.\n");
+        printf("Opcao invalida. Tente novamente.\n");
     }
 }

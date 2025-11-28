@@ -23,7 +23,7 @@ SRCS = $(SRC_DIR)/Main.c $(SRC_DIR)/EstadoCripto.c $(SRC_DIR)/Operacoes.c
 OBJS = Main.o EstadoCripto.o Operacoes.o
 
 # Nome do executável
-TARGET = tp3_criptoanalise.exe
+TARGET = execucao.exe
 
 # ====================================================================
 # Regras de Build

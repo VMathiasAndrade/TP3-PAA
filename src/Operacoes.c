@@ -80,6 +80,7 @@ void alterarChave(char charCifrado, char charOriginal) {
 }
 
 void frequenciaCaracter() {
+
     int alfabeto[26] = {0};
     int totalLetras = 0;
 
@@ -92,16 +93,25 @@ void frequenciaCaracter() {
             totalLetras++;
         }
     }
-    
-    Frequencia listaOcorrencia[26];
-    for (int i = 0; i < 26; i++) {
-        listaOcorrencia[i].letra = 'A' + i;
-        listaOcorrencia[i].quantidade = alfabeto[i];
-        listaOcorrencia[i].frequencia = ((double)listaOcorrencia[i].quantidade / totalLetras) * 100.0;
-    }
 
-    for (int i = 0; i < 26 - 1; i++) {
-        for (int j = 0; j < 26 - i - 1; j++) {
+  
+    Frequencia listaOcorrencia[26];
+   for (int i = 0; i < 26; i++) {
+    listaOcorrencia[i].letra = 'A' + i;
+    listaOcorrencia[i].quantidade = alfabeto[i];
+
+    if (totalLetras > 0) {
+        listaOcorrencia[i].frequencia =
+            ((double)listaOcorrencia[i].quantidade / totalLetras) * 100.0;
+    } else {
+        listaOcorrencia[i].frequencia = 0.0;
+    }
+}
+
+
+
+    for (int i = 0; i < 25; i++) {
+        for (int j = 0; j < 25 - i; j++) {
             if (listaOcorrencia[j].quantidade < listaOcorrencia[j + 1].quantidade) {
                 Frequencia temp = listaOcorrencia[j];
                 listaOcorrencia[j] = listaOcorrencia[j + 1];
@@ -109,52 +119,110 @@ void frequenciaCaracter() {
             }
         }
     }
-    
-    printf("Letra  |  QTDE  |  Freq.\n");
+
+    printf("\n=== Frequencia LOCAL do arquivo ===\n");
+    printf("Letra | Qtde | Freq(%%)\n");
     for (int i = 0; i < 26; i++) {
         if (listaOcorrencia[i].quantidade > 0) {
-            printf("%c    |    %d    |    %.2f%%\n",
+            printf("%c | %d | %.2f%%\n",
                 listaOcorrencia[i].letra,
                 listaOcorrencia[i].quantidade,
                 listaOcorrencia[i].frequencia);
         }
     }
+
+  
+
+    int freqGlobal[26];
+    int totalGlobal;
+
+    carregarEEncriptarTodosTextos(estadoAtual.shiftCriptografia, freqGlobal, &totalGlobal);
+
+    printf("\n=== Frequencia GLOBAL (12 arquivos juntos) ===\n");
+    printf("Letra | Qtde | Freq(%%)\n");
+    for (int i = 0; i < 26; i++) {
+        if (freqGlobal[i] > 0) {
+            printf("%c | %d | %.2f%%\n",'A' + i, freqGlobal[i], (freqGlobal[i] * 100.0) / totalGlobal);
+        }
+    }
+
+
+
+    printf("\n=== Comparacao LOCAL x GLOBAL ===\n");
+    printf("Letra | Local(%%) | Global(%%) | Diferenca\n");
+
+    for (int i = 0; i < 26; i++) {
+        double local = (totalLetras > 0) ? (alfabeto[i] * 100.0 / totalLetras) : 0.0;
+        double global = (totalGlobal > 0) ? (freqGlobal[i] * 100.0 / totalGlobal) : 0.0;
+
+        printf("%c | %.2f | %.2f | %.2f\n",
+               'A' + i, local, global, local - global);
+    }
+
+ 
+
+    double freqPortugues[26] = {
+        14.63, 1.04, 3.88, 4.99, 12.57, 1.02,
+        1.30, 1.28, 6.18, 0.40, 0.02, 2.78,
+        4.74, 5.05, 10.73, 2.52, 1.20, 6.53,
+        7.81, 4.34, 4.63, 1.67, 0.01, 0.21,
+        0.01, 0.47
+    };//tabela da especificacao
+
+
     
+    int ordemPortugues[26];
+    for (int i = 0; i < 26; i++) ordemPortugues[i] = i;
+
+    for (int i = 0; i < 25; i++) {
+        for (int j = 0; j < 25 - i; j++) {
+            if (freqPortugues[ordemPortugues[j]] < freqPortugues[ordemPortugues[j + 1]]) {
+                int tmp = ordemPortugues[j];
+                ordemPortugues[j] = ordemPortugues[j + 1];
+                ordemPortugues[j + 1] = tmp;
+            }
+        }
+    }
+
+    printf("\n=== CHUTE DE MAPEAMENTO SUGERIDO ===\n");
+    printf("(com base em frequencia local x lingua portuguesa)\n\n");
+
+    for (int i = 0; i < 26; i++) {
+        char cifrada = listaOcorrencia[i].letra;
+        char originalSugerido = 'A' + ordemPortugues[i];
+
+        printf("%c (cifrado) -> %c (provavel original)\n",
+            cifrada, originalSugerido);
+    }
+
+   
     char opcao;
     do {
-        printf("\nDeseja dar um 'chute'? (Sim - s / Nao - n)");
+        printf("\nDeseja aplicar algum mapeamento sugerido? (s/n): ");
         scanf(" %c", &opcao);
 
-        if (opcao == 'S' || opcao == 's') {
+        if (opcao == 's' || opcao == 'S') {
             char cifrada, original;
-
-            printf("Qual letra deseja trocar: ");
+            printf("Letra cifrada: ");
             scanf(" %c", &cifrada);
-            printf("Trocar por qual: ");
+
+            printf("Mapear para: ");
             scanf(" %c", &original);
 
-            cifrada = toupper(cifrada); 
-            original = toupper(original);
-            
-            int indice = cifrada - 'A';
-
-            if (estadoAtual.chaveDecifracao[indice] != '\0') {
-                printf("AVISO: letra foi mapeada e ja houve uma suposicao!\n");
-                break;
-            }
-
-            estadoAtual.chaveDecifracao[indice] = original;
+            alterarChave(cifrada, original);
         }
-    } while (opcao == 'S' || opcao == 's');
+
+    } while (opcao == 's' || opcao == 'S');
 }
+
 
 void casamentoExato(char* padrao) {
     //Algoritmo Shift-And
     int m = strlen(padrao);
-    int n = strlen(estadoAtual.textoParcial);
+    int n = strlen(estadoAtual.textoCifrado);
 
     if (m > 64) {
-        printf("Erro: O padrão é muito longo para o algoritmo Shift-And (max 64 caracteres).\n");
+        printf("Erro: O padrão e muito longo para o algoritmo Shift-And (max 64 caracteres).\n");
         return;
     }
     
@@ -183,8 +251,8 @@ void casamentoExato(char* padrao) {
 }
 
 void casamentoAproximado(char* padrao, int k) {
-    int m = strlen(padrao);
-    int n = strlen(estadoAtual.textoCifrado);
+    int m = strlen(padrao); // é o tamanho do padrão
+    int n = strlen(estadoAtual.textoParcial); // é o tamanho do texto decifrado
 
     if (m > 64) {
         printf("Erro: O padrao e muito longo (max 64 caracteres).\n");
@@ -194,11 +262,11 @@ void casamentoAproximado(char* padrao, int k) {
     if (!textoDecifradoTemp) return;
 
     for (int i = 0; i < n; i++) {
-        char c = estadoAtual.textoCifrado[i];
+        char c = estadoAtual.textoParcial[i];
         if (isalpha(c)) {
-            int idx = c - 'A';
-            if (estadoAtual.chaveDecifracao[idx] != '\0') {
-                textoDecifradoTemp[i] = estadoAtual.chaveDecifracao[idx];
+            int indice = c - 'A';
+            if (estadoAtual.chaveDecifracao[indice] != '\0') {
+                textoDecifradoTemp[i] = estadoAtual.chaveDecifracao[indice];
             } else {
                 textoDecifradoTemp[i] = c;
             }
@@ -228,7 +296,7 @@ void casamentoAproximado(char* padrao, int k) {
         
         for(int j=0; j <= k; j++) R_antigo[j] = R[j];
 
-        R[0] = ((R_antigo[0] << 1) | 1UL) & M[c];
+        R[0] = ((R_antigo[0] << 1) | 1UL) & M[c]; 
 
         for (int j = 1; j <= k; j++) {
             unsigned long match = ((R_antigo[j] << 1) | 1UL) & M[c];
@@ -242,7 +310,7 @@ void casamentoAproximado(char* padrao, int k) {
 
             int inicio = i - m + 1;
             if (inicio < 0) inicio = 0;
-            printf("Pos %d: ", inicio);
+            printf("Posicao %d: ", inicio);
             
             for(int x = inicio; x <= i; x++) {
                 if (textoDecifradoTemp[x] == padrao[x - inicio]) {
@@ -259,27 +327,57 @@ void casamentoAproximado(char* padrao, int k) {
     free(textoDecifradoTemp);
 }
 
-void exportarChave(const char *nomeArquivoChave) {
-    FILE *fChave = fopen(nomeArquivoChave, "w");
-    if (!fChave) {
-        printf("Erro: Não foi possível salvar a chave em '%s'.\n", nomeArquivoChave);
+void gerarTextoDecifradoCompleto(char *saida) {
+    int len = strlen(estadoAtual.textoCifrado);
+
+    for (int i = 0; i < len; i++) {
+        char c = estadoAtual.textoCifrado[i];
+
+        if (isalpha(c)) {
+            int indice = c - 'A';
+            char decif = estadoAtual.chaveDecifracao[indice];
+
+            if (decif != '\0') {
+                saida[i] = decif;   
+            } else {
+                saida[i] = c;       
+            }
+        } else {
+            saida[i] = c;           
+        }
+    }
+    saida[len] = '\0';
+}
+
+void exportarChaveETexto(const char *nomeArquivo) {
+    FILE *f = fopen(nomeArquivo, "w");
+    if (!f) {
+        printf("Erro: Não foi possível criar o arquivo '%s'.\n", nomeArquivo);
         return;
     }
 
-    fprintf(fChave, "--- CHAVE FINAL DE CRIPTOANÁLISE ---\n");
-    fprintf(fChave, "Cifrado -> Original\n");
+   
+    printf(f, "===== CHAVE DECRIPTOGRAFIA =====\n\n");
+    printf(f, "Cifrado  ->  Original\n");
+    printf(f, "--------------------------\n");
 
-    for (int i = 0; i < TAMANHO_ALFABETO; i++) {
-        char mapeadoPara = estadoAtual.chaveDecifracao[i];
-        char charCifrado = 'A' + i;
-
-        if (mapeadoPara != '\0') {
-            fprintf(fChave, "%c -> %c\n", charCifrado, mapeadoPara);
-        } else {
-            fprintf(fChave, "%c -> DESCONHECIDA\n", charCifrado);
-        }
+    for (int i = 0; i < 26; i++) {
+        char original = estadoAtual.chaveDecifracao[i];
+        if (original == '\0')
+            printf(f, "%c -> (desconhecida)\n", 'A' + i);
+        else
+            printf(f, "%c ->  %c\n", 'A' + i, original);
     }
 
-    printf("Chave de criptografia exportada com sucesso para '%s'.\n", nomeArquivoChave);
-    fclose(fChave);
+    
+    printf(f, "\n\n===== TEXTO DECIFRADO =====\n\n");
+
+    char bufferDecifrado[TAMANHO_MAX_TEXTO];
+    gerarTextoDecifradoCompleto(bufferDecifrado);
+
+    printf(f, "%s\n", bufferDecifrado);
+
+    fclose(f);
+
+    printf("Arquivo completo exportado com sucesso para '%s'.\n", nomeArquivo);
 }

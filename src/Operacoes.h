@@ -15,6 +15,6 @@ void frequenciaCaracter(); // Opção 2
 void casamentoExato(char* padrao); //opcão 3
 void casamentoAproximado(char* padrao, int k); //opcao 4
 void alterarChave(char charCifrado, char charOriginal); //opcao 5
-void exportarChave(const char *nomeArquivoChave); //opcao 6
+void exportarChaveETexto(const char *nomeArquivo); //opcao 6
 
 #endif

@@ -20,5 +20,6 @@ extern EstadoCripto estadoAtual;
 void inicializarEstadoCripto(void);
 int nomarlizarAcentuacao(FILE* f);
 int carregarEEncriptarTexto(const char *nomeArquivoClaro, const char *nomeArquivoCifrado);
+int carregarEEncriptarTodosTextos(int deslocamento, int freqGlobal[26], int *totalGlobal);
 
 #endif
